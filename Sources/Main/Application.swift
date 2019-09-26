@@ -20,38 +20,25 @@ class Application{
         let router = EngineRouter.default()
         
         // Set Routing
-        let controller = BookController()
+        let bookController = BookController()
+        let publisherController = PublisherController()
         
-        router.get("test", use: controller.testConnect )
-        router.get("book", use: controller.getBook )
-        router.post("book", use: controller.postBook )
-        router.put("book", use: controller.putBook )
-        router.delete("book", use: controller.deleteBook )
+        router.get("book", use: bookController.getBook )
+        router.post("book", use: bookController.postBook )
+        router.put("book", use: bookController.putBook )
+        router.delete("book", use: bookController.deleteBook )
         
-//        router.get("error") { request -> Response /* It is necessary to tell the compiler the return type */ in
-//            let response = Response(http: HTTPResponse(status: .badRequest), using: request)
-//            let myContent = Book(title: "Three kingdom", author: "Mitsuteru yokoyama")
-//            try response.content.encode(myContent, as: MediaType.json)
-//            return response
-//        }
-//
-//        router.get("/notfound") { request -> Response in
-//            let response = request.response(ServerError( reason: "Not found is not found."), as: .json)
-//            let myContent = Book(title: "Three kingdom", author: "Mitsuteru yokoyama")
-//            try response.content.encode(myContent, as: .json)
-//            response.http.status = .notFound
-//
-//            return response
-//        }
-//
-//        router.on(.GET, at: "always", use: controller.alwaysError )
+        router.get("publishers", use: publisherController.getPublishers )
+        router.get("publisher", Int.parameter, use: publisherController.getPublisherWithBooks )
+        router.post("publisher", use: publisherController.postPublisher )
+        router.post("publisher", Int.parameter, "book", use: publisherController.setPublisherWithBook )
         
         // Set router
         services.register(router, as: Router.self)
         
         // Set server config
-        let serverConfiure = NIOServerConfig.default(hostname: "127.0.0.1", port: 8080)
-        services.register(serverConfiure)
+        let config = NIOServerConfig.default(hostname: "127.0.0.1", port: 8080)
+        services.register(config)
         
         // Apply change service
         self.services = services
@@ -62,9 +49,9 @@ class Application{
         let env = try Environment.detect()
         
         // Create vapor application
-        let application = try Vapor.Application(config: config, environment: env, services: self.services)
+        let vaporApp = try Vapor.Application(config: config, environment: env, services: self.services)
         
         // Application launch
-        try application.run()
+        try vaporApp.run()
     }
 }

@@ -17,11 +17,15 @@ extension Book: MySQLModel{
         }
     }
     
+    // Table name
     public static var name: String {
         return "Books"
     }
-//    static let sqlTableIdentifierString = "Books"
-//    public static var sqlTableIdentifierString: String {
-//        return "\(self.self)s"
-//    }
+}
+
+extension Book {
+    // this book's related publisher
+    var publisher: Parent<Book, Publisher>? {
+        return parent(\.publisherId)
+    }
 }

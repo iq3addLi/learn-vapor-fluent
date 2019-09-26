@@ -11,11 +11,13 @@ final class Book{
     var identifier: Int?
     var title: String
     var author: String
+    var publisherId: Int?
     
-    init( identifier: Int?, title: String, author: String){
+    init( identifier: Int?, title: String, author: String, publisherId: Int? = nil){
         self.identifier = identifier
         self.title = title
         self.author = author
+        self.publisherId = publisherId
     }
 }
 

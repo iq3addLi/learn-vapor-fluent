@@ -13,11 +13,6 @@ class BookController{
         return DatabaseAssistant()
     }()
     
-    func testConnect(_ request: Request) throws -> GeneralInfomation {
-        self.database.testConnect()
-        return GeneralInfomation("Accepted connect.")
-    }
-    
     func getBook(_ request: Request) throws -> [Book] {
         let offset = request.query[ Int.self, at: "offset" ]
         let limit = request.query[ Int.self, at: "limit" ]
